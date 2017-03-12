@@ -3,7 +3,7 @@ function [ x_p ] = find_poison_adaline( X, Y, y_p )
 %   Detailed explanation goes here
 
     %initialise x_p as zero vector
-    x_p = zeros(1, size(X,1));
+    x_p = zeros(1, size(X,2));
     
     learning_rate = 0.01;
     iter = 1500;
