@@ -1,6 +1,7 @@
-function [x] = conjgrad_1(w,Xp,Yp,x_val,y_val)
+function [x] = conjgrad_1(w,Xp,Yp,Xval,Yval)
 D = size(Xp,2);
-b = mean(repmat(w'*x_val' - y_val,1,D).*x_val);    
+b = mean(repmat(w'*Xval - Yval,1,D).*Xval); % b = dCval/dw
+                                               
 
 %Initialize with zeros
     x = zeros(D,1);
@@ -13,14 +14,14 @@ b = mean(repmat(w'*x_val' - y_val,1,D).*x_val);
     %argument of the function, i.e. you don't need A anymore, but the
     %aforementioned gradients.
     Aeval = finiteDif(Xp,Yp,w,x);
-    r = b - Aeval;
+    r = b - Aeval; % Aeval = A * x = d/dw(d/dw(Ctr)) * x ==> return x when d/dw(d/dw(Ctr)) * x is approximately equals to b (dCval/dw)
     
     p = r;
     rsold = r' * r;
 
     for i = 1:length(b)
         %TODO: Here you have the apply the same trick again
-        Ap = finiteDif(Xp,Yp,w,p);
+        Ap = finiteDif(Xp,Yp,w,p); % Ap = A * p
         alpha = rsold / (p' * Ap);
         x = x + alpha * p;
         r = r - alpha * Ap;
@@ -34,6 +35,7 @@ b = mean(repmat(w'*x_val' - y_val,1,D).*x_val);
 end
 
 function [out] = finiteDif(Xp,Yp,w,x)
+% outputs: d/dw(d/dw(Ctr)) * x ; row vector 1xD
 r = 1e-8;
 D = size(Xp,2);
 w2 = w + r.*x;

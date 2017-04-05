@@ -1,4 +1,5 @@
 function [x] = conjgrad(A, b)
+% Ax = b; inputs: matrix A; vector b; returns: vector x
     %Initialize with zeros
     x = zeros(size(A,2),1);
     
