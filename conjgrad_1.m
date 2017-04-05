@@ -1,10 +1,11 @@
 function [x] = conjgrad_1(w,Xp,Yp,Xval,Yval)
-D = size(Xp,2);
-b = mean(repmat(w'*Xval - Yval,1,D).*Xval); % b = dCval/dw
+f = size(Xp,2);
+D = size(Xp,1);
+b = mean(repmat(Xval*w - Yval,1,f).*Xval)'; % b = dCval/dw
                                                
 
 %Initialize with zeros
-    x = zeros(D,1);
+    x = zeros(f,1);
     
     %TO DO: In this line you have to change the product of matrix A and
     %vector x with the trick in Andrew Ng's paper. Do two functions: one to
@@ -35,11 +36,12 @@ b = mean(repmat(w'*Xval - Yval,1,D).*Xval); % b = dCval/dw
 end
 
 function [out] = finiteDif(Xp,Yp,w,x)
-% outputs: d/dw(d/dw(Ctr)) * x ; row vector 1xD
+% outputs: d/dw(d/dw(Ctr)) * x ; column vector fx1
 r = 1e-8;
-D = size(Xp,2);
+f = size(Xp,2);
 w2 = w + r.*x;
-C2 = mean(repmat(w2'*Xp - Yp,1,D).*Xp);
-C1 = mean(repmat(w'*Xp - Yp,1,D).*Xp);
+C2 = mean(repmat(Xp*w2 - Yp,1,f).*Xp);
+C1 = mean(repmat(Xp*w - Yp,1,f).*Xp);
 out = (C2 - C1)./r;
+out = out';
 end

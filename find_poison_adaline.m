@@ -2,6 +2,12 @@ function [ x_p ] = find_poison_adaline( X, Y, Xval, Yval, y_p )
 %FIND_POISON Summary of this function goes here
 %   Detailed explanation goes here
 
+    Dtr = size(X,1);
+    Dval = size(Xval,1);
+    %Include the bias term in the training data
+    X = [ones(Dtr,1) X];
+    Xval = [ones(Dval,1) Xval];
+
     %initialise x_p as zero vector
     x_p = zeros(1, size(X,2));
     
@@ -22,9 +28,10 @@ function [ x_p ] = find_poison_adaline( X, Y, Xval, Yval, y_p )
         x_p = x_p + learning_rate.*dCval_dxp;
     
     end
-
+    
     % when loop exited, optimal x_p is found
-
+    x_p = x_p(:, 2:size(x_p,2)); % remove the bias term 
+    
 end
 
 function [dCval_dxp] = find_dCval_dxp(w, Xp, Yp, Xval, Yval, x_p, y_p)
